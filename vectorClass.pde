@@ -1,32 +1,16 @@
 
 // = new PVector(width/2, random(100));
 Star star;
-PVector hello;
+PVector hello; // starting position of stars
+
 ArrayList<Star> shootingS = new ArrayList<Star> ();
 
-/*
 void setup() {
   size(1024,700);
   background(0);
+  stroke(212, 128, 32, 128);
   frameRate(25);
   noFill();
-  star = new Star();
-}
-
-
-void draw() {
-  star.display();
-  star.update();
-}
-*/
-
-void setup() {
-  size(1024,700);
-  background(0);
-  frameRate(25);
-  noFill();
-
-  
 }
 
 void draw() {
