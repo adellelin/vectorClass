@@ -1,27 +1,43 @@
+// vim: set ts=2 expandtab:
+// Please don't move or dele the line above!  Thx, Holly
 
 // = new PVector(width/2, random(100));
 // ADD
 Vst v;
 Star star;
 PVector hello; // starting position of stars
+int caught = 0;
 
 ArrayList<Star> shootingS = new ArrayList<Star> ();
-ArrayList<Flower> bouquet = new ArrayList<Flower>();
+ArrayList<Flower> garden = new ArrayList<Flower>();
+ArrayList<Marker> markers = new ArrayList<Marker>();
 
 void setup() {
   //ADD
-  size(600, 512, P2D);
+  size(512, 600, P2D);
   v = new Vst(this, createSerial());
   blendMode(ADD);   // lines brighter where they overlap
   noFill();   // don't fill in shapes
   stroke(212, 128, 32, 128);  // (r,g,b,alpha) for lines
   frameRate(25);
+
+  // populate the markers arraylist with all the markers
+  for (int i = 1; i < 6; i++) {
+    markers.add(new Marker(180 + (i * 30), 580));
+  }
 }
+
 
 void draw() {
   background(0);
   stroke(100);
 
+  
+  for (int i = 0; i < markers.size(); i++) {
+    Marker tic = markers.get(i);
+    tic.display();
+  }
+	
   pushMatrix();
   translate(mouseX, mouseY);
   for (int i = 0; i < 3; i++) {
@@ -49,26 +65,33 @@ void draw() {
     }
   }
 
-  // draw a cursor
-
-  //int test = random(9);
-  if (floor(random(40)) == 0) {
-    // (xpos, ypos, num_petals, scale_size[0.5, 1.5], rotation_rate[-0.2, 0.2])
-    bouquet.add(new Flower(
-      random(50, 500), 
-      random(50, 550), 
-      (int)ceil(random(5.1, 8.9)), 
-      random(0.5, 1.5)));
+  // randomly increment the caught counter for testing
+  println(caught);
+  if (floor(random(30)) == 0) {
+    caught++;
   }
-
-  for (int i = 0; i < bouquet.size(); i++) {
-    Flower blossom = bouquet.get(i);
-    if (blossom.age > 140) {
-      bouquet.remove(blossom);
-    } else {
-      blossom.display();
-    }
+  // If we have caught 3 stars, push another blossom onto the garden
+  if (caught == 3) {
+    if (garden.size() < 5) {
+      // remove tic from markers
+      markers.remove(0);
+      // add blossom to garden  
+      //(xpos, ypos, num_petals, scale_size, rotation_rate, rotation_dir)
+      garden.add(new Flower(
+        random(80, 420), 
+        random(450, 540), 
+        (int)ceil(random(5.1, 8.9)), 
+        random(0.5, 1.5),
+        random(-0.2, 0.2)));
+    } 
+    caught = 0; // reset catch counter
   }
+  for (int i = 0; i < garden.size(); i++) {
+    Flower blossom = garden.get(i);
+    blossom.display();  
+  }
+  
+
   //ADD
   v.display();  // send the vectors to the board to be drawn
 }
