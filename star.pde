@@ -4,6 +4,7 @@ public class Star {
  float circAngle = 360/points * 2;
  float radius;
 
+float collideNet;
  int x = 0;
  int y = 0;
  float vx;
@@ -12,22 +13,22 @@ public class Star {
  float sy = -1;
 
  PVector acceleration;
- PVector startPos;
- PVector velocity;
+ PVector velocity;     PVector startPos;
+
  PVector newPos;
  int age = 0;
  float rotateRate = 0.01;
  float rotateState = 0;
  
  float G = 9.81;
- float dt = 1.0/50;
-
+ float dt = 1.0/25;
   
  Star(PVector inCenter, float inRadius) {
    //save star parameters to be accessed locally
    this.startPos = inCenter;
    this.radius = inRadius;
-   starAngle(random(45,60), random(10, 15));
+   //(angle, velocity)
+   starAngle(random(55,65), random(10, 15));
  }
 
  void display() {
@@ -86,7 +87,8 @@ public class Star {
    sy = sy + vy * dt;
    // println(sx + " and " + sy);
    velocity = new PVector(sx, -sy); 
-   newPos = startPos.add(velocity);
+   this.newPos = startPos.add(velocity);
+   
  }
 
 // angle that star curve starts with

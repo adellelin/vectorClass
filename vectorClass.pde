@@ -23,29 +23,39 @@ void draw() {
   stroke(100);
 
   pushMatrix();
-  translate(mouseX, mouseY);
-  for (int i = 0; i < 3; i++) {
-    rotate(PI/3);
-    line(-5, 0, 5, 0);
+  translate(width - 100, mouseY);
+  // draw a net in place of the mouse;
+  for (int i = 1; i < 10; i++) {
+   //rotate(PI/2);
+   //quad(0, 0, 80, 0, 5, -50,0, -50 );
+   line(0, 0, 0, -25);
+   PVector net = new PVector(0, -i * 2.5);
+   PVector net2 = new PVector(i * 8, 0);
+   PVector net3 = new PVector(i, - 5 / 8 * i - 25); 
+   line(net2.x, net2.y, net.x, net.y);
+   line(net2.x, net2.y, net3.x, net3.y);
   }
   popMatrix();
   // set starting position of each star
-  hello = new PVector(-random(width/8), random(height/4, height));
-  if (floor(random(10)) == 0) {
+  hello = new PVector(-random(width/8), random(height/2, height/3));
+  if (floor(random(20)) == 0) {
     // set population starting location
     //Star(PVector inCenter, float inRadius)
     shootingS.add(new Star(hello, random(5, 20)));
   }
 
   for (int i = 0; i < shootingS.size(); i++) {
-    Star group = shootingS.get(i);
+    Star starry = shootingS.get(i);
     // after a period of time, remove the star from the array list
-    if (group.age > 150) {
-      shootingS.remove(group);
+    float collideNet = dist(starry.newPos.x, starry.newPos.y, mouseX, mouseY);
+    //if(collideNet < 50.0) {
+    println(starry.newPos.x);
+  //}
+    if (starry.age > 150) {
+      shootingS.remove(starry);
     } else {
-
-      group.display();
-      group.update();
+      starry.display();
+      starry.update();
     }
   }
 
@@ -78,7 +88,6 @@ void line(PVector p0, PVector p1)
 {
   if (p0 == null || p1 == null)
     return;
-
   line(p0.x, p0.y, p1.x, p1.y);
 }
 
@@ -100,7 +109,7 @@ void ellipse(float x, float y, float rx, float ry)
 {
   // Deduce how long r is in real pixels
   float r = abs(modelX(0, 0, 0) - modelX((rx+ry), 0, 0));
-  int steps = 30; //(int)(r / 5);
+  int steps = 20; //(int)(r / 5);
   float dtheta = 2 * PI / steps;
   float theta = dtheta;
   float x0 = rx;
@@ -122,4 +131,13 @@ void triangle(float x1, float y1, float x2, float y2, float x3, float y3)
  line(x2, y2, x3, y3);
  line(x3, y3, x1, y1);
 }
+
+void quad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) 
+{
+ line(x1, y1, x2, y2);
+ line(x2, y2, x3, y3);
+ line(x3, y3, x4, y4);
+ line(x4, y4, x1, y1);
+}
+ 
  
