@@ -3,7 +3,7 @@
 
 // = new PVector(width/2, random(100));
 // ADD
-Vst v;
+Vst vst;
 Star star;
 PVector hello; // starting position of stars
 int caught = 0;
@@ -15,7 +15,8 @@ ArrayList<Marker> markers = new ArrayList<Marker>();
 void setup() {
   //ADD
   size(512, 600, P2D);
-  v = new Vst(this, createSerial());
+  vst = new Vst(this, createSerial());
+  vst.colorStroke = color(220, 220, 255);
   blendMode(ADD);   // lines brighter where they overlap
   noFill();   // don't fill in shapes
   stroke(212, 128, 32, 128);  // (r,g,b,alpha) for lines
@@ -110,7 +111,7 @@ void draw() {
   }  
 
   //ADD
-  v.display();  // send the vectors to the board to be drawn
+  vst.display();  // send the vectors to the board to be drawn
 }
 
 void startScreen() {
@@ -124,60 +125,60 @@ void startScreen() {
 
 
 //ADD
-void line(PVector p0, PVector p1)
-{
-  if (p0 == null || p1 == null)
-    return;
-  line(p0.x, p0.y, p1.x, p1.y);
-}
+//void line(PVector p0, PVector p1)
+//{
+//  if (p0 == null || p1 == null)
+//    return;
+//  line(p0.x, p0.y, p1.x, p1.y);
+//}
 
-void line(float x0, float y0, float x1, float y1)
-{
-  if (v.send_to_display)
-  {
-    super.line(x0, y0, x1, y1);
-    return;
-  }
+//void line(float x0, float y0, float x1, float y1)
+//{
+//  if (v.send_to_display)
+//  {
+//    super.line(x0, y0, x1, y1);
+//    return;
+//  }
 
-  int s = g.strokeColor;
-  boolean bright = red(s) == 255 && green(s) == 255 && blue(s) == 255;
-  v.line(bright, x0, y0, x1, y1);
-}
+//  int s = g.strokeColor;
+//  boolean bright = red(s) == 255 && green(s) == 255 && blue(s) == 255;
+//  v.line(bright, x0, y0, x1, y1);
+//}
 
 
-void ellipse(float x, float y, float rx, float ry)
-{
-  // Deduce how long r is in real pixels
-  float r = abs(modelX(0, 0, 0) - modelX((rx+ry), 0, 0));
-  int steps = 20; //(int)(r / 5);
-  float dtheta = 2 * PI / steps;
-  float theta = dtheta;
-  float x0 = rx;
-  float y0 = 0;
+//void ellipse(float x, float y, float rx, float ry)
+//{
+//  // Deduce how long r is in real pixels
+//  float r = abs(modelX(0, 0, 0) - modelX((rx+ry), 0, 0));
+//  int steps = 20; //(int)(r / 5);
+//  float dtheta = 2 * PI / steps;
+//  float theta = dtheta;
+//  float x0 = rx;
+//  float y0 = 0;
 
-  for (int i = 0; i < steps; i++, theta += dtheta)
-  {
-    float x1 = rx * cos(theta);
-    float y1 = ry * sin(theta);
-    line(x + x0, y + y0, x + x1, y + y1);
-    x0 = x1;
-    y0 = y1;
-  }
-}
+//  for (int i = 0; i < steps; i++, theta += dtheta)
+//  {
+//    float x1 = rx * cos(theta);
+//    float y1 = ry * sin(theta);
+//    line(x + x0, y + y0, x + x1, y + y1);
+//    x0 = x1;
+//    y0 = y1;
+//  }
+//}
 
-void triangle(float x1, float y1, float x2, float y2, float x3, float y3) 
-{
- line(x1, y1, x2, y2);
- line(x2, y2, x3, y3);
- line(x3, y3, x1, y1);
-}
+//void triangle(float x1, float y1, float x2, float y2, float x3, float y3) 
+//{
+// line(x1, y1, x2, y2);
+// line(x2, y2, x3, y3);
+// line(x3, y3, x1, y1);
+//}
 
-void quad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) 
-{
- line(x1, y1, x2, y2);
- line(x2, y2, x3, y3);
- line(x3, y3, x4, y4);
- line(x4, y4, x1, y1);
-}
+//void quad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) 
+//{
+// line(x1, y1, x2, y2);
+// line(x2, y2, x3, y3);
+// line(x3, y3, x4, y4);
+// line(x4, y4, x1, y1);
+//}
  
  
