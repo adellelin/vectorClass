@@ -99,6 +99,7 @@ void draw() {
     caught = 0; // reset catch counter
   } 
  
+  stroke(64);
   for (int i = 0; i < garden.size(); i++) {
     Flower blossom = garden.get(i);
     blossom.display();  
