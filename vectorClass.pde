@@ -103,16 +103,11 @@ void draw() {
     blossom.display();  
     if(garden.size() == 5) {
    background(0);
+   //clears arraylist
    garden.clear();
    startScreen();
     }
-  }
-  // if(garden.size() == 5) {
-  // startScreen();
-  // garden.remove(blossom);
-  //}
-//  }
-  
+  }  
 
   //ADD
   v.display();  // send the vectors to the board to be drawn
