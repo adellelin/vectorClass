@@ -7,6 +7,7 @@ Vst v;
 Star star;
 PVector hello; // starting position of stars
 int caught = 0;
+Star shootingS;
 
 ArrayList<Star> starries = new ArrayList<Star> ();
 ArrayList<Flower> garden = new ArrayList<Flower>();
@@ -54,7 +55,7 @@ void draw() {
   popMatrix();
   // set starting position of each star
   hello = new PVector(-random(width/8), random(height/2, height/3));
-  if (floor(random(20)) == 0) {
+  if (floor(random(20)) == 0 && garden.size() < 5) {
     // set population starting location
     //Star(PVector inCenter, float inRadius)
     starries.add(new Star(hello, random(5, 20)));
@@ -103,6 +104,8 @@ void draw() {
     blossom.display();  
     if(garden.size() == 5) {
    background(0);
+   //delay(1000);
+   starries.clear();
    //clears arraylist
    garden.clear();
    startScreen();
