@@ -13,9 +13,9 @@ float collideNet;
  float sy = -1;
 
  PVector acceleration;
- PVector velocity;     PVector startPos;
+ PVector velocity;         PVector startPos;
 
- PVector newPos;
+  PVector newPos = new PVector(0, 0);
  int age = 0;
  float rotateRate = 0.01;
  float rotateState = 0;

@@ -5,7 +5,7 @@ Vst v;
 Star star;
 PVector hello; // starting position of stars
 
-ArrayList<Star> shootingS = new ArrayList<Star> ();
+ArrayList<Star> starries = new ArrayList<Star> ();
 ArrayList<Flower> bouquet = new ArrayList<Flower>();
 
 void setup() {
@@ -23,15 +23,18 @@ void draw() {
   stroke(100);
 
   pushMatrix();
-  translate(width - 100, mouseY);
+  // set the position of the mouse and net here
+  PVector netPos = new PVector(width - 150, mouseY);
+  translate(netPos.x, netPos.y);
+  scale(1.5);
   // draw a net in place of the mouse;
   for (int i = 1; i < 10; i++) {
    //rotate(PI/2);
    //quad(0, 0, 80, 0, 5, -50,0, -50 );
    line(0, 0, 0, -25);
    PVector net = new PVector(0, -i * 2.5);
-   PVector net2 = new PVector(i * 8, 0);
-   PVector net3 = new PVector(i, - 5 / 8 * i - 25); 
+   PVector net2 = new PVector(i * 6, 0);
+   PVector net3 = new PVector(i, - 3 / 8 * i - 25); 
    line(net2.x, net2.y, net.x, net.y);
    line(net2.x, net2.y, net3.x, net3.y);
   }
@@ -41,21 +44,21 @@ void draw() {
   if (floor(random(20)) == 0) {
     // set population starting location
     //Star(PVector inCenter, float inRadius)
-    shootingS.add(new Star(hello, random(5, 20)));
+    starries.add(new Star(hello, random(5, 20)));
   }
 
-  for (int i = 0; i < shootingS.size(); i++) {
-    Star starry = shootingS.get(i);
+  for (int i = 0; i < starries.size(); i++) {
+    Star shootingS = starries.get(i);
     // after a period of time, remove the star from the array list
-    float collideNet = dist(starry.newPos.x, starry.newPos.y, mouseX, mouseY);
-    //if(collideNet < 50.0) {
-    println(starry.newPos.x);
-  //}
-    if (starry.age > 150) {
-      shootingS.remove(starry);
+    float collideNet = dist(shootingS.newPos.x, shootingS.newPos.y, netPos.x, netPos.y);
+    if(collideNet < 50.0) {
+    starries.remove(shootingS);
+  }
+    if (shootingS.age > 150) {
+      starries.remove(shootingS);
     } else {
-      starry.display();
-      starry.update();
+      shootingS.display();
+      shootingS.update();
     }
   }
 
