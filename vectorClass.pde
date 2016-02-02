@@ -10,8 +10,11 @@ int caught = 0;
 Star shootingS;
 int framesLeft;
 int timerStart;
-int timer;
 
+// NOTE: Setup global vars
+int timerDuration = 2000;
+int timer;
+boolean isAnimatingPostGarden = false;
 
 ArrayList<Star> starries = new ArrayList<Star> ();
 ArrayList<Flower> garden = new ArrayList<Flower>();
@@ -119,24 +122,23 @@ void draw() {
     postGarden = new ArrayList<Flower>(garden);
     garden.clear();
     starries.clear();
-    framesLeft = 20;    // NOTE: Reset frames here
+    
+    // NOTE: Converting to millis()
+    timer = millis() + timerDuration;
+    isAnimatingPostGarden = true;  // NOTE: Enable animation
   }
 
-  // NOTE: Do post garden animation  
-  framesLeft--;
-  // NOTE: Flowers in postGarden will de display as long as there are
-  // frames left.
-  if (framesLeft > 0) {
+  // Do post garden animation  
+  if (isAnimatingPostGarden && millis() < timer) {
     for (Flower flower : postGarden) {
       flower.display();
     }
   }
-  // NOTE: The game is reset when framesLeft == 0
-  else if (framesLeft == 0) {
+  else if (isAnimatingPostGarden) {
+    isAnimatingPostGarden = false;  // NOTE: Disable animation
     startScreen();
     postGarden.clear();
   }
-  // NOTE: When framesLeft are negative, nothing happens.
 
 
   //ADD
