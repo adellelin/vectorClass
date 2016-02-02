@@ -8,9 +8,14 @@ Star star;
 PVector hello; // starting position of stars
 int caught = 0;
 Star shootingS;
+int framesLeft;
+int timerStart;
+int timer;
+
 
 ArrayList<Star> starries = new ArrayList<Star> ();
 ArrayList<Flower> garden = new ArrayList<Flower>();
+ArrayList<Flower> postGarden = new ArrayList<Flower>();
 ArrayList<Marker> markers = new ArrayList<Marker>();
 
 void setup() {
@@ -23,6 +28,8 @@ void setup() {
   stroke(212, 128, 32, 128);  // (r,g,b,alpha) for lines
   frameRate(25);
   startScreen();
+  timerStart = int(millis()/1000);
+  println(timerStart);
 }
 
 
@@ -42,18 +49,9 @@ void draw() {
   translate(netPos.x, netPos.y);
   scale(1.5);
   // draw a net in place of the mouse;
-  for (int i = 1; i < 10; i++) {
-    //rotate(PI/2);
-    //quad(0, 0, 80, 0, 5, -50,0, -50 );
-    line(0, 10, 0, -25);
-    PVector net = new PVector(0, -i * 2.5);
-    PVector net2 = new PVector(i * 6, 0);
-    PVector net3 = new PVector(i, - 3 / 8 * i - 25); 
-    stroke(150);
-    line(net2.x, net2.y, net.x, net.y);
-    line(net2.x, net2.y, net3.x, net3.y);
-  }
+  mouseNet();
   popMatrix();
+
   // set starting position of each star
   hello = new PVector(-random(width/8), random(height/2, height/3));
   if (floor(random(20)) == 0 && garden.size() < 5) {
@@ -64,12 +62,14 @@ void draw() {
 
   for (int i = 0; i < starries.size(); i++) {
     Star shootingS = starries.get(i);
-    // after a period of time, remove the star from the array list
+    // set collision so that when star position meets mouse position, the stars get removed / caught
     float collideNet = dist(shootingS.newPos.x, shootingS.newPos.y, netPos.x, netPos.y);
     if (collideNet < 50.0) {
       starries.remove(shootingS);
       caught++;
     }
+
+    // after a period of time, remove the star from the array list
     if (shootingS.age > 150) {
       starries.remove(shootingS);
     } else {
@@ -79,12 +79,12 @@ void draw() {
   }
 
   // randomly increment the caught counter for testing
-  println(caught);
+  //println(caught);
   //if (floor(random(30)) == 0) {
   //  caught++;
   //}
   // If we have caught 3 stars, push another blossom onto the garden
-  if (caught == 3) {
+  if (caught == 1) {
     if (garden.size() < 5) {
       // remove tic from markers
       markers.remove(0);
@@ -96,23 +96,38 @@ void draw() {
         (int)ceil(random(5.1, 8.9)), 
         random(0.5, 1.5), 
         random(-0.2, 0.2)));
+      postGarden.add(new Flower(
+        random(80, 420), 
+        random(450, 540), 
+        (int)ceil(random(5.1, 8.9)), 
+        random(0.5, 1.5), 
+        random(-0.2, 0.2)));
     } 
     caught = 0; // reset catch counter
   } 
 
   stroke(64);
   for (int i = 0; i < garden.size(); i++) {
+
     Flower blossom = garden.get(i);
+    //Flower postBlossom = postGarden.get(i);
     blossom.display();  
     if (garden.size() == 5) {
-      int m = millis();
-      background(0);
-      starries.clear();
-      //clears arraylist
-      garden.clear();
-      startScreen();
+      postGarden = new ArrayList<Flower>(garden);      
+      //Flower postBlossom = postGarden.get(i);
+      //postBlossom.display();  
+      endAnimation();
+      println(timerStart);
+      if (setTimer() == true) {
+        background(0);
+        //clears arraylist
+        starries.clear();
+        garden.clear();
+        startScreen();
+      }
+      //timerStart = int(millis()/1000);
     }
-  }  
+  }
 
   //ADD
   vst.display();  // send the vectors to the board to be drawn
@@ -123,4 +138,28 @@ void startScreen() {
   for (int i = 1; i < 6; i++) {
     markers.add(new Marker(180 + (i * 30), 580));
   }
+}
+
+void mouseNet() {
+  for (int i = 1; i < 10; i++) {
+    line(0, 10, 0, -25);
+    //line(0, -25, 50, 0);
+    PVector net = new PVector(0, -i * 2.5);
+    PVector net2 = new PVector(i * 6, 0);
+    PVector net3 = new PVector(i, -3/8 * i - 25); 
+    stroke(150);
+    line(net2.x, net2.y, net.x, net.y);
+    line(net2.x, net2.y, net3.x, net3.y);
+  }
+}
+
+void endAnimation() {
+  framesLeft = 5;
+  timerStart = int(millis()/1000) % (framesLeft + 1);
+  return;
+}
+
+boolean setTimer() {
+  return timerStart == framesLeft;
+  // return int(millis()/1000) - timerStart == framesLeft;
 }
