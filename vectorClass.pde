@@ -96,38 +96,48 @@ void draw() {
         (int)ceil(random(5.1, 8.9)), 
         random(0.5, 1.5), 
         random(-0.2, 0.2)));
-      postGarden.add(new Flower(
-        random(80, 420), 
-        random(450, 540), 
-        (int)ceil(random(5.1, 8.9)), 
-        random(0.5, 1.5), 
-        random(-0.2, 0.2)));
+
+      // NOTE: Removed the postGarden.add() code. We don't need to create
+      // new Flowers for the postGarden as we're copying them from the garden
+      // container.
     } 
     caught = 0; // reset catch counter
   } 
 
   stroke(64);
+  // Display each flower in garden
   for (int i = 0; i < garden.size(); i++) {
-
     Flower blossom = garden.get(i);
-    //Flower postBlossom = postGarden.get(i);
-    blossom.display();  
-    if (garden.size() == 5) {
-      postGarden = new ArrayList<Flower>(garden);      
-      //Flower postBlossom = postGarden.get(i);
-      //postBlossom.display();  
-      endAnimation();
-      println(timerStart);
-      if (setTimer() == true) {
-        background(0);
-        //clears arraylist
-        starries.clear();
-        garden.clear();
-        startScreen();
-      }
-      //timerStart = int(millis()/1000);
+    blossom.display();
+  }
+  
+  // Handle player reaching 5 stars
+  // NOTE: Pulled this code out of the loop above. The original code
+  // this is based off was being run for each flower in the garden,
+  // though only needed to be run once.
+  if (garden.size() == 5) {
+    postGarden = new ArrayList<Flower>(garden);
+    garden.clear();
+    starries.clear();
+    framesLeft = 20;    // NOTE: Reset frames here
+  }
+
+  // NOTE: Do post garden animation  
+  framesLeft--;
+  // NOTE: Flowers in postGarden will de display as long as there are
+  // frames left.
+  if (framesLeft > 0) {
+    for (Flower flower : postGarden) {
+      flower.display();
     }
   }
+  // NOTE: The game is reset when framesLeft == 0
+  else if (framesLeft == 0) {
+    startScreen();
+    postGarden.clear();
+  }
+  // NOTE: When framesLeft are negative, nothing happens.
+
 
   //ADD
   vst.display();  // send the vectors to the board to be drawn
@@ -153,13 +163,14 @@ void mouseNet() {
   }
 }
 
-void endAnimation() {
-  framesLeft = 5;
-  timerStart = int(millis()/1000) % (framesLeft + 1);
-  return;
-}
+// NOTE: Commented these out as they're no longer needed.
+//void endAnimation() {
+//  framesLeft = 5;
+//  timerStart = int(millis()/1000) % (framesLeft + 1);
+//  return;
+//}
 
-boolean setTimer() {
-  return timerStart == framesLeft;
-  // return int(millis()/1000) - timerStart == framesLeft;
-}
+//boolean setTimer() {
+//  return timerStart == framesLeft;
+//  // return int(millis()/1000) - timerStart == framesLeft;
+//}
