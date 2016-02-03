@@ -33,8 +33,6 @@ float collideNet;
 
  void display() {
   
-   stroke(255);
-  
    rotateState += rotateRate;
    //draw stars
    
@@ -43,11 +41,9 @@ float collideNet;
      stroke(255);
      translate(startPos.x, startPos.y);
      
-     rotate(rotateState);
+     rotate(rotateState); //rotate very slightly from original position
      PVector point1 = new PVector(cos(radians(i))*(radius), sin(radians(i))*(radius));
      PVector point2 = new PVector(cos(radians(i + circAngle))*(radius), sin(radians(i + circAngle))*(radius));
-     //PVector cPoint1 = PVector.add(startPos, point1);
-     //PVector cPoint2 = PVector.add(startPos, point2);
      line(point1.x, point1.y, point2.x, point2.y);
      popMatrix();
      
@@ -65,8 +61,7 @@ float collideNet;
        PVector pointB = new PVector(cos(radians(angle)) * (radius) * (3 + (0.8 * j)), 
          sin(radians(angle))*(radius) * (3 + (0.8 * j)));
        
-       //PVector cPointB = PVector.add(startPos, pointB);
-       //line(cPointA.x, cPointA.y, cPointB.x, cPointB.y);
+       //draw the trail lines
        line(pointA.x, pointA.y, pointB.x, pointB.y);
       }
      popMatrix();
@@ -77,15 +72,11 @@ float collideNet;
 
  void update() {
    // add movement to star location
-   //velocity = new PVector(.1, .3);//new PVector(random(3), int(random(-4)));  
-   //acceleration = new PVector(0.0001, 0.001);
-   
    vx = vx;
    vy = vy - G * dt; //gravity pulls down
    // update star position
    sx = sx + vx * dt;
    sy = sy + vy * dt;
-   // println(sx + " and " + sy);
    velocity = new PVector(sx, -sy); 
    this.newPos = startPos.add(velocity);
    

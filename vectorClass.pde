@@ -9,9 +9,12 @@ PVector hello; // starting position of stars
 int caught = 0;
 Star shootingS;
 int framesLeft;
-int timerStart;
-int timer;
+int timerStart = 0;
 
+// if using millis()
+int timerDuration = 5000;
+int timer;
+boolean isAnimatingPostGarden = false;
 
 ArrayList<Star> starries = new ArrayList<Star> ();
 ArrayList<Flower> garden = new ArrayList<Flower>();
@@ -36,8 +39,7 @@ void setup() {
 void draw() {
   background(0);
   stroke(100);
-
-
+  // show the 5 tics at bottom of screen
   for (int i = 0; i < markers.size(); i++) {
     Marker tic = markers.get(i);
     tic.display();
@@ -56,7 +58,6 @@ void draw() {
   hello = new PVector(-random(width/8), random(height/2, height/3));
   if (floor(random(20)) == 0 && garden.size() < 5) {
     // set population starting location
-    //Star(PVector inCenter, float inRadius)
     starries.add(new Star(hello, random(5, 20)));
   }
 
@@ -78,11 +79,6 @@ void draw() {
     }
   }
 
-  // randomly increment the caught counter for testing
-  //println(caught);
-  //if (floor(random(30)) == 0) {
-  //  caught++;
-  //}
   // If we have caught 3 stars, push another blossom onto the garden
   if (caught == 1) {
     if (garden.size() < 5) {
@@ -96,42 +92,52 @@ void draw() {
         (int)ceil(random(5.1, 8.9)), 
         random(0.5, 1.5), 
         random(-0.2, 0.2)));
-      postGarden.add(new Flower(
-        random(80, 420), 
-        random(450, 540), 
-        (int)ceil(random(5.1, 8.9)), 
-        random(0.5, 1.5), 
-        random(-0.2, 0.2)));
     } 
-    caught = 0; // reset catch counter
+    caught = 0; // reset star catcher counter
   } 
 
   stroke(64);
   for (int i = 0; i < garden.size(); i++) {
-
-    Flower blossom = garden.get(i);
-    //Flower postBlossom = postGarden.get(i);
-    blossom.display();  
-    if (garden.size() == 5) {
-      postGarden = new ArrayList<Flower>(garden);      
-      //Flower postBlossom = postGarden.get(i);
-      //postBlossom.display();  
-      endAnimation();
-      println(timerStart);
-      if (setTimer() == true) {
-        background(0);
-        //clears arraylist
-        starries.clear();
-        garden.clear();
-        startScreen();
-      }
-      //timerStart = int(millis()/1000);
-    }
+   Flower blossom = garden.get(i);
+   blossom.display();
   }
+  //for (Flower blossom : garden) {
+  //  blossom.display();
+  //}
+  if (garden.size() == 5) {
+    // copy contents from garden into postGarden
+    postGarden = new ArrayList<Flower>(garden); 
+    garden.clear();
+    starries.clear();
+   // framesLeft = 40;
+   timerStart = millis();
+   println(timerStart);
+  // timer = millis() + timerDuration;
+  
+   isAnimatingPostGarden = true;
+  }
+  //framesLeft --;
+
+ // if (framesLeft > 0) {
+   if (isAnimatingPostGarden && millis() < (timerStart + 2000)) {
+   starries.clear();
+    for (Flower flower : postGarden) {
+      flower.display();
+      
+    }
+  } 
+  //else if (framesLeft == 0) {
+    else if (isAnimatingPostGarden) {
+      isAnimatingPostGarden = false;
+    startScreen();
+    //garden.clear();
+    postGarden.clear();
+  } // framesLeft will continue to go negative
 
   //ADD
   vst.display();  // send the vectors to the board to be drawn
 }
+
 
 void startScreen() {
   // populate the markers arraylist with all the markers
