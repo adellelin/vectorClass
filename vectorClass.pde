@@ -4,10 +4,8 @@
 // = new PVector(width/2, random(100));
 // ADD
 Vst vst;
-Star star;
 PVector hello; // starting position of stars
 int caught = 0;
-Star shootingS;
 int framesLeft;
 int timerStart = 0;
 
