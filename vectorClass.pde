@@ -6,18 +6,21 @@
 Vst vst;
 PVector hello; // starting position of stars
 int caught = 0;
-int framesLeft;
-int timerStart = 0;
 
 // if using millis()
 int timerDuration = 5000;
 int timer;
-boolean isAnimatingPostGarden = false;
 
 ArrayList<Star> starries = new ArrayList<Star> ();
 ArrayList<Flower> garden = new ArrayList<Flower>();
-ArrayList<Flower> postGarden = new ArrayList<Flower>();
 ArrayList<Marker> markers = new ArrayList<Marker>();
+
+// for end enimation sequence
+boolean isAnimatingPostGarden = false;
+ArrayList<Flower> postGarden = new ArrayList<Flower>();
+int timerStart;
+int animationTime = 2000;
+int framesLeft;
 
 void setup() {
   //ADD
@@ -28,8 +31,6 @@ void setup() {
   stroke(212, 128, 32, 128);  // (r,g,b,alpha) for lines
   frameRate(25);
   startScreen();
-  timerStart = int(millis()/1000);
-  println(timerStart);
 }
 
 
@@ -109,7 +110,6 @@ void draw() {
    // framesLeft = 40;
    timerStart = millis();
    println(timerStart);
-  // timer = millis() + timerDuration;
   
    isAnimatingPostGarden = true;
   }
